@@ -25,11 +25,37 @@ sandbox up dev -v
 
 `up` starts the sandbox, `dev` uses dev mode, which allows to execute transactions nearly instantly (instead of the ~4 seconds it takes on a regular network), and `-v` is for verbose output.
 
+### Clone this project
+
+```
+git clone git@github.com:ivanschuetz/network_test_util.git
+```
+
+### Install local dependency
+
+This project depends on another private Rust project. For now we link it as local source.
+
+##### Navigate to the parent of this project
+
+##### Clone dependency:
+
+```
+git clone git@github.com:ivanschuetz/mbase.git
+```
+
+You should have now
+
+```bash
+parent
+├─ mbase
+├─ network_test_util
+```
+
 ### Create project's environment file:
 
 From this repo's root:
 
-Copy `./sample.env` and rename it in `.env`. Adjust variable's values if needed.
+Copy `./sample.env` and rename it in `.env`.
 
 ### Run project:
 
