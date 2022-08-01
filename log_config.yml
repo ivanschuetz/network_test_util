@@ -1,0 +1,18 @@
+appenders:
+  console:
+    kind: console
+    encoder:
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S)})} {h({f}:{L})} {h({l})} {h(- {m})}\n"
+    filters:
+      - kind: threshold
+        level: trace
+
+loggers:
+  mbase:
+    level: trace
+    appenders:
+      - console
+  network_test_util:
+     level: trace
+     appenders:
+      - console 
