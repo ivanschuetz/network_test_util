@@ -7,7 +7,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-algonaut = { path = "../../algonaut", features = ["rustls"], default-features = false }
+algonaut = { git = "https://github.com/manuelmauro/algonaut", branch = "main", features = ["rustls"], default-features = false }
+# algonaut = { path = "../../algonaut", features = ["rustls"], default-features = false }
 mbase = { path = "../api/mbase" }
 anyhow = "1.0"
 tokio = { version = "1.6.0", features = ["rt-multi-thread", "macros"] }
