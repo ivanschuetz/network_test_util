@@ -7,13 +7,12 @@ appenders:
       - kind: threshold
         level: trace
 
-root: 
-  level: trace
-  appenders:
-  - console 
-
 loggers:
   mbase:
     level: trace
     appenders:
       - console
+  network_test_util:
+     level: trace
+     appenders:
+      - console 
