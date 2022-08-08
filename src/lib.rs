@@ -86,6 +86,7 @@ pub async fn reset_and_fund_network(net: &Network) -> Result<OnChainDeps> {
 
     let deps = setup_on_chain_deps(&algod, &capi_owner).await?;
     log::info!("Capi deps: {deps:?}");
+    println!("<print hack> Capi deps: {deps:?}");
 
     Ok(deps)
 }
