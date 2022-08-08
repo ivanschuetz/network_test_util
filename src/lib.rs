@@ -85,6 +85,8 @@ pub fn reset_network(net: &Network) -> Result<()> {
         log::debug!("{}", _line);
     }
 
+    log::debug!("Script finished");
+
     Ok(())
 }
 
