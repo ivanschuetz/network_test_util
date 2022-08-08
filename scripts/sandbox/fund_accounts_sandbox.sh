@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "start fund_accounts_sandbox"
 # get a funder account (the genesis accounts change when the network is recreated)
 ACCOUNTS_OUTPUT=$(sandbox goal account list)

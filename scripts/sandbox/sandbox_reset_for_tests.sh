@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # run before each test
 
 # reset sandbox
