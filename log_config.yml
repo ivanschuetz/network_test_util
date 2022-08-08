@@ -8,9 +8,9 @@ appenders:
         level: trace
 
 root: 
-    level: trace
-    appenders:
-    - console 
+  level: trace
+  appenders:
+  - console 
 
 loggers:
   mbase:
