@@ -5,6 +5,8 @@ echo "start fund_accounts_sandbox"
 ACCOUNTS_OUTPUT=$(sandbox goal account list)
 echo $ACCOUNTS_OUTPUT
 for acct in $(echo "$ACCOUNTS_OUTPUT" | cut -f 3 |tr -s ' '); do
+    echo "will echo account"
+    echo $acct
     ACCOUNTS+=("$acct")
 done
 FUNDER=${ACCOUNTS[0]}
