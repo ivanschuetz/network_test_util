@@ -66,9 +66,8 @@ pub fn reset_network(net: &Network) -> Result<()> {
 
     log::debug!("Will execute script cmd..");
 
-    let error_res = cmd_with_net_args.stdout(Stdio::piped()).spawn()?.stderr;
-
-    log::debug!("Script cmd stderr: {:?}", error_res);
+    // let error_res = cmd_with_net_args.stdout(Stdio::piped()).spawn()?.stderr;
+    // log::debug!("Script cmd stderr: {:?}", error_res);
 
     let reset_res = cmd_with_net_args
         .stdout(Stdio::piped())
