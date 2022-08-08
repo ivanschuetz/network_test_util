@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # run before each test
 
