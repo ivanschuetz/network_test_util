@@ -64,17 +64,25 @@ pub fn reset_network(net: &Network) -> Result<()> {
         Network::Test => panic!("Not supported: reseting testnet"),
     };
 
+    log::debug!("Will execute script cmd..");
+
+    let error_res = cmd_with_net_args.stdout(Stdio::piped()).spawn()?.stderr;
+
+    log::debug!("Script cmd stderr: {:?}", error_res);
+
     let reset_res = cmd_with_net_args
         .stdout(Stdio::piped())
         .spawn()?
         .stdout
         .expect("Couldn't reset network");
 
+    log::debug!("Script cmd stdout: {:?}", reset_res);
+
     for _line in BufReader::new(reset_res)
         .lines()
         .filter_map(|line| line.ok())
     {
-        // log::debug!("{}", _line);
+        log::debug!("{}", _line);
     }
 
     Ok(())
