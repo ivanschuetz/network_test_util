@@ -10,8 +10,9 @@ echo "will start loop"
 for acct in $(echo "$ACCOUNTS_OUTPUT" | cut -f 3 |tr -s ' '); do
     echo "will echo account"
     echo $acct
-    ACCOUNTS+=("$acct")
+    # ACCOUNTS+=("$acct")
 done
+echo "finish loop"
 FUNDER=${ACCOUNTS[0]}
 echo "Funding account:"
 echo $FUNDER
