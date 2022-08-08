@@ -99,6 +99,7 @@ pub fn dao_specs_with_funds_pars(target: FundsAmount, end_date: Timestamp) -> Se
         ShareAmount::new(80), // unwrap: assumes a higher supply
         target,
         end_date,
+        None,
     )
     .unwrap()
 }
