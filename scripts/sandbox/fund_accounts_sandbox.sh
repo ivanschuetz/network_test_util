@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
 
 echo "start fund_accounts_sandbox"
-echo "another line"
+
 # get a funder account (the genesis accounts change when the network is recreated)
 ACCOUNTS_OUTPUT=$(sandbox goal account list)
-echo "?????"
 echo $ACCOUNTS_OUTPUT
-echo "will start loop"
 for acct in $(echo "$ACCOUNTS_OUTPUT" | cut -f 3 |tr -s ' '); do
-    echo "will echo account"
-    echo $acct
-    # ACCOUNTS+=("$acct")
+    ACCOUNTS+=("$acct")
 done
-echo "finish loop"
+
 FUNDER=${ACCOUNTS[0]}
-echo "Funding account:"
-echo $FUNDER
 
 # import additional account
 # 7ZLNWP5YP5DCCCLHAYYETZQLFH4GTBEKTBFQDHA723I7BBZ2FKCOZCBE4I
