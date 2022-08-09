@@ -24,6 +24,7 @@ use crate::test_data::{
 use {
     anyhow::{anyhow, Result},
     dotenv::dotenv,
+    fund_accounts_with_algos::fund_accounts_with_algos,
     std::env,
     std::process::Command,
     std::{
@@ -32,12 +33,13 @@ use {
     },
 };
 
+pub mod fund_accounts_with_algos;
 pub mod test_data;
 pub mod tests_msig;
 pub mod wasm;
 
 /// inits logs and resets the network
-pub fn test_init() -> Result<()> {
+pub async fn test_init() -> Result<()> {
     // load vars in .env file
 
     dotenv().ok();
@@ -46,7 +48,11 @@ pub fn test_init() -> Result<()> {
         init_logger()?;
         log::debug!("Logging is enabled");
     }
-    reset_network(&network())?;
+
+    let network = network();
+
+    reset_network(&network)?;
+    fund_accounts_with_algos(&network).await?;
 
     Ok(())
 }
@@ -56,11 +62,13 @@ pub fn reset_network(net: &Network) -> Result<()> {
 
     let cmd_with_net_args = match net {
         &Network::SandboxPrivate => cmd
-            .current_dir("scripts/sandbox")
-            .arg("./sandbox_reset_for_tests.sh"),
-        Network::Private => cmd
-            .current_dir("scripts/private_net")
-            .arg("./private_net_reset_for_tests.sh"),
+            .current_dir(format!("scripts/sandbox"))
+            .arg("./sandbox_dev_reset.sh"),
+
+        // May be restored in the future, not deleting the variant for now.
+        Network::Private => {
+            panic!("Private network not supported anymore.")
+        }
         Network::Test => panic!("Not supported: reseting testnet"),
     };
 
@@ -77,11 +85,17 @@ pub fn reset_network(net: &Network) -> Result<()> {
 
     log::debug!("Script cmd stdout: {:?}", reset_res);
 
-    for _line in BufReader::new(reset_res)
+    for line in BufReader::new(reset_res)
         .lines()
         .filter_map(|line| line.ok())
     {
-        log::debug!("{}", _line);
+        log::debug!("{}", line);
+
+        if line.contains("No active sandbox to reset.") {
+            return Err(anyhow!(
+                "Please start the sandbox first. e.g: `sandbox up dev -v`"
+            ));
+        }
     }
 
     log::debug!("Script finished");

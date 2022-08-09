@@ -18,7 +18,7 @@ pub enum WasmBuildConfig {
 }
 
 pub async fn reset_and_fund_local_network() -> Result<()> {
-    test_init()?;
+    test_init().await?;
     let deps = reset_and_fund_network(&Network::SandboxPrivate).await?;
 
     update_wasm_deps(
