@@ -53,7 +53,10 @@ pub async fn test_init_with_network(network: &Network) -> Result<()> {
         log::debug!("Logging is enabled");
     }
 
+    log::info!("Will reset the network..");
     reset_network(&network)?;
+
+    log::info!("Will fund accounts with algos..");
     fund_accounts_with_algos(&network).await?;
 
     Ok(())
@@ -111,7 +114,7 @@ pub async fn do_setup_on_chain_deps(net: &Network) -> Result<OnChainDeps> {
     let capi_owner = capi_owner();
 
     let deps = setup_on_chain_deps(&algod, &capi_owner).await?;
-    log::info!("Capi deps: {deps:?}");
+    log::info!("ℹ️ Capi deps: {deps:?}");
 
     Ok(deps)
 }
@@ -126,7 +129,10 @@ pub struct OnChainDeps {
 /// Creates the funds asset and capi dependencies
 pub async fn setup_on_chain_deps(algod: &Algod, capi_owner: &Account) -> Result<OnChainDeps> {
     let params = algod.suggested_transaction_params().await?;
+
     let funds_asset_id = create_and_distribute_funds_asset(algod).await?;
+
+    log::info!("Will optin and send funds asset to msig test account..");
 
     optin_and_send_asset_to_msig(
         algod,
@@ -137,8 +143,6 @@ pub async fn setup_on_chain_deps(algod: &Algod, capi_owner: &Account) -> Result<
         &msig()?,
     )
     .await?;
-
-    log::info!("funds_asset_id: {funds_asset_id:?}");
 
     Ok(OnChainDeps {
         funds_asset_id,
@@ -151,6 +155,8 @@ pub async fn create_and_distribute_funds_asset(algod: &Algod) -> Result<FundsAss
 
     let asset_creator = funds_asset_creator();
     let asset_id = create_funds_asset(algod, &params, &asset_creator).await?;
+
+    log::info!("Will optin and send fund asset to test accounts..");
 
     // we want to only opt-in, not fund the capi owner. the capi owner is assumed to start without any funding
     // no reason other than backwards compatibility with tests
@@ -198,6 +204,8 @@ async fn create_funds_asset(
     params: &SuggestedTransactionParams,
     creator: &Account,
 ) -> Result<FundsAssetId> {
+    log::info!("Will create funds asset..");
+
     let t = TxnBuilder::with(
         params,
         // 10 quintillions

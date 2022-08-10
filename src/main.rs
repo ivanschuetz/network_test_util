@@ -7,8 +7,10 @@ async fn main() -> Result<()> {
     let network = network();
 
     test_init_with_network(&network).await?;
+
+    log::info!("Will setup on chain deps..");
     do_setup_on_chain_deps(&network).await?;
 
-    log::info!("Network reset and configured.");
+    log::info!("✅ Network reset and configured.");
     Ok(())
 }
