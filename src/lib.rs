@@ -36,20 +36,22 @@ use {
 pub mod fund_accounts_with_algos;
 pub mod test_data;
 pub mod tests_msig;
-pub mod wasm;
 
 /// inits logs and resets the network
 pub async fn test_init() -> Result<()> {
-    // load vars in .env file
+    let network = network();
+    test_init_with_network(&network).await
+}
 
+/// inits logs and resets the network
+pub async fn test_init_with_network(network: &Network) -> Result<()> {
+    // load vars in .env file
     dotenv().ok();
 
     if env::var("TESTS_LOGGING")?.parse::<i32>()? == 1 {
         init_logger()?;
         log::debug!("Logging is enabled");
     }
-
-    let network = network();
 
     reset_network(&network)?;
     fund_accounts_with_algos(&network).await?;
@@ -103,7 +105,8 @@ pub fn reset_network(net: &Network) -> Result<()> {
     Ok(())
 }
 
-pub async fn reset_and_fund_network(net: &Network) -> Result<OnChainDeps> {
+/// calls setup_on_chain_deps with default dependencies
+pub async fn do_setup_on_chain_deps(net: &Network) -> Result<OnChainDeps> {
     let algod = algod_for_net(net);
     let capi_owner = capi_owner();
 
