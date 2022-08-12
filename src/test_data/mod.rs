@@ -100,6 +100,8 @@ pub fn dao_specs_with_funds_pars(target: FundsAmount, end_date: Timestamp) -> Se
         target,
         end_date,
         None,
+        ShareAmount::new(0),
+        ShareAmount::new(u64::MAX),
     )
     .unwrap()
 }
