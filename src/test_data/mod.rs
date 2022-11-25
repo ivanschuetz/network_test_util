@@ -95,7 +95,7 @@ pub fn dao_specs_with_funds_pars(target: FundsAmount, end_date: Timestamp) -> Se
         Decimal::from_str("0.4").unwrap().try_into().unwrap(),
         FundsAmount::new(5_000_000),
         None,
-        "https://twitter.com/capi_fin".to_owned(),
+        "https://twitter.com/helloworld".to_owned(),
         ShareAmount::new(80), // unwrap: assumes a higher supply
         target,
         end_date,
