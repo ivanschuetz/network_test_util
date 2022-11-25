@@ -126,7 +126,7 @@ pub struct OnChainDeps {
     pub capi_address: CapiAddress,
 }
 
-/// Creates the funds asset and capi dependencies
+/// Creates the funds asset and capi dependencies, and funds the default accounts
 pub async fn setup_on_chain_deps(algod: &Algod, capi_owner: &Account) -> Result<OnChainDeps> {
     let params = algod.suggested_transaction_params().await?;
 
