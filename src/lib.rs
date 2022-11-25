@@ -65,9 +65,13 @@ pub async fn test_init_with_network(network: &Network) -> Result<()> {
 pub fn reset_network(net: &Network) -> Result<()> {
     let mut cmd = Command::new("sh");
 
+    // TODO env variable
+    let scripts_path = "/Users/ivanschuetz/dev/repo/github/capi/network_test_util";
+
     let cmd_with_net_args = match net {
         &Network::SandboxPrivate => cmd
-            .current_dir(format!("scripts/sandbox"))
+            // .current_dir(format!("scripts/sandbox"))
+            .current_dir(format!("{scripts_path}/scripts/sandbox"))
             // calling sandbox directly here, returns "No active sandbox to reset" (there is an active sandbox)
             // so with script
             .arg("./sandbox_dev_reset.sh"),
