@@ -124,9 +124,8 @@ pub async fn fund_accounts_with_algos(net: &Network) -> Result<()> {
 }
 
 fn to_address(str: &str) -> Result<Address> {
-    Ok(str
-        .parse()
-        .map_err(|e| anyhow!("Couldn't parse: {str} to address, error: {e:?}"))?)
+    str.parse()
+        .map_err(|e| anyhow!("Couldn't parse: {str} to address, error: {e:?}"))
 }
 
 async fn send_algos(algod: &Algod, kmd: &Kmd, sender: &Address, receiver: &Address) -> Result<()> {
@@ -136,7 +135,7 @@ async fn send_algos(algod: &Algod, kmd: &Kmd, sender: &Address, receiver: &Addre
     let tx = TxnBuilder::with(&params, Pay::new(*sender, *receiver, amount).build()).build()?;
 
     let wallet_password = "";
-    let wallet_handle_token = wallet_handle_token(&kmd, "").await?;
+    let wallet_handle_token = wallet_handle_token(kmd, "").await?;
 
     let sign_response = kmd
         .sign_transaction(&wallet_handle_token, wallet_password, &tx)
@@ -146,7 +145,7 @@ async fn send_algos(algod: &Algod, kmd: &Kmd, sender: &Address, receiver: &Addre
         .broadcast_raw_transaction(&sign_response.signed_transaction)
         .await?;
 
-    wait_for_p_tx_with_id(&algod, &send_response.tx_id.parse()?).await?;
+    wait_for_p_tx_with_id(algod, &send_response.tx_id.parse()?).await?;
 
     Ok(())
 }

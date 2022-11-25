@@ -54,10 +54,10 @@ pub async fn test_init_with_network(network: &Network) -> Result<()> {
     }
 
     log::info!("Will reset the network..");
-    reset_network(&network)?;
+    reset_network(network)?;
 
     log::info!("Will fund accounts with algos..");
-    fund_accounts_with_algos(&network).await?;
+    fund_accounts_with_algos(network).await?;
 
     Ok(())
 }
@@ -182,7 +182,7 @@ pub async fn create_and_distribute_funds_asset(algod: &Algod) -> Result<FundsAss
 
     // Log the funded addresses
     let addresses_str = accounts
-        .into_iter()
+        .iter()
         .map(|a| a.address().to_string())
         .collect::<Vec<String>>()
         .join(", ");
@@ -224,7 +224,7 @@ async fn create_funds_asset(
 
     let signed_t = creator.sign_transaction(t)?;
 
-    let p_tx = send_tx_and_wait(&algod, &signed_t).await?;
+    let p_tx = send_tx_and_wait(algod, &signed_t).await?;
     let asset_id = p_tx
         .asset_index
         .ok_or_else(|| anyhow!("Couldn't retrieve asset id from pending tx"))?;
@@ -267,7 +267,7 @@ async fn optin_and_send_asset_to_msig(
     let optin_tx_signed = receiver.sign(optin_tx)?;
     let fund_tx_signed = sender.sign_transaction(fund_tx)?;
 
-    send_txs_and_wait(&algod, &[optin_tx_signed, fund_tx_signed]).await?;
+    send_txs_and_wait(algod, &[optin_tx_signed, fund_tx_signed]).await?;
 
     log::debug!(
         "Opted in and funded (funds asset): {}",
@@ -282,7 +282,7 @@ fn test_accounts_initial_funds() -> FundsAmount {
 }
 
 pub fn msig() -> Result<TestsMsig> {
-    Ok(TestsMsig::new(vec![msig_acc1(), msig_acc2(), msig_acc3()])?)
+    TestsMsig::new(vec![msig_acc1(), msig_acc2(), msig_acc3()])
 }
 
 async fn optin_and_submit(
@@ -300,7 +300,7 @@ async fn optin_and_submit(
 
     let optin_tx_signed = account.sign_transaction(optin_tx)?;
 
-    send_txs_and_wait(&algod, &[optin_tx_signed]).await?;
+    send_txs_and_wait(algod, &[optin_tx_signed]).await?;
 
     log::debug!("Opted in: {}, to asset: {asset_id}", account.address());
 
@@ -316,8 +316,7 @@ pub async fn optin_and_fund_accounts_with_asset(
     accounts: &[Account],
 ) -> Result<()> {
     for account in accounts {
-        optin_and_send_asset_to_account(algod, params, asset_id, amount.0, sender, &account)
-            .await?;
+        optin_and_send_asset_to_account(algod, params, asset_id, amount.0, sender, account).await?;
     }
     Ok(())
 }
@@ -348,7 +347,7 @@ pub async fn optin_and_send_asset_to_account(
     let optin_tx_signed = receiver.sign_transaction(optin_tx)?;
     let fund_tx_signed = sender.sign_transaction(fund_tx)?;
 
-    send_txs_and_wait(&algod, &[optin_tx_signed, fund_tx_signed]).await?;
+    send_txs_and_wait(algod, &[optin_tx_signed, fund_tx_signed]).await?;
 
     log::debug!(
         "Opted in and funded: {}, asset: {asset_id}",
